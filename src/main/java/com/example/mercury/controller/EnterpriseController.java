@@ -80,7 +80,7 @@ public class EnterpriseController {
     @PostMapping("{uuid}/processAllDocs")
     public String processtEntrepriseDocs(@PathVariable(name = "uuid") String uuid) {
         Enterprise enterprise = enterpriseService.getByUUID(uuid);
-        mercuryService.processAllDocumentByEnterprise(enterprise,null);
+        mercuryService.processAllDocumentByEnterprise(enterprise,null, null);
 
         return "redirect:/enterprise/"+uuid;
     }

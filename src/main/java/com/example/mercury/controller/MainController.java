@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class MainController {
     private final EnterpriseService enterpriseService;
@@ -24,11 +26,12 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String getIndexPage(Model model, Authentication authentication) {
+    public String getIndexPage(Model model, Authentication authentication, HttpSession session) {
         User user = getCurrentUser(authentication);
 
         model.addAttribute("fullName",user.getFullName());
         model.addAttribute("enterpriseDocumentList",enterpriseService.getListNumerDocumentOfEnterpriseByUser(user));
+        model.addAttribute("session", session.getId());
         return "Main";
     }
 
@@ -40,8 +43,8 @@ public class MainController {
     }
 
     @GetMapping("/processAllDocumets")
-    public String processUserDocs(Authentication authentication) {
-        mercuryService.processAllDocumentByUser(getCurrentUser(authentication));
+    public String processUserDocs(Authentication authentication, HttpSession session) {
+        mercuryService.processAllDocumentByUser(getCurrentUser(authentication), session.getId());
 
         return ("redirect:/");
     }

@@ -10,7 +10,7 @@
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <script src="/app.js"></script>
-    <script>$(document).ready ( connect());
+    <!--<script>$(document).ready ( connect());-->
     </script>
 </head>
 <body>
@@ -29,9 +29,11 @@
         <input type="submit" value="Проверить новые документы"/>
     </form>
     <br>
-    <form action="/processAllDocumets" method="get">
+    <button onclick="doProcessing()">Выполнить гашение документов</button>
+    <!--<form action="/processAllDocumets" method="get">
         <input type="submit" value="Выполнить гашение документов"/>
-    </form>
+    </form>-->
+    <br>
     <div style="color: #0000FFFF" id="notification"></div>
     <br>
 
@@ -52,5 +54,7 @@
                 <td><a href="/enterprise/${enterpriseDocument.enterprise.uuid}">перейти</a></td>
             </tr>
         </#list>
+    </table>
+    <div id="test" hidden>${session}</div>
 </body>
 </html>

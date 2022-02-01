@@ -45,12 +45,13 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void send(NotificationProcessingMessage message) {
+    public void send(NotificationProcessingMessage message, String notificationId) {
+        if (notificationId==null) return;
         if (message==null) return;
         if (message.getTotalEnterprise()!=0 && message.getTotalDocuments()!=0) {
             generateContent(message);
         }
-        template.convertAndSend("/topic/notification", message);
+        template.convertAndSend("/topic/notification/"+notificationId, message);
     }
 
     private void generateContent(NotificationProcessingMessage message) {

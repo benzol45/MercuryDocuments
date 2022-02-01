@@ -11,8 +11,9 @@ public interface MercuryService {
     List<Document> getDocumentFromMercuryByEntreprise(Enterprise enterprise);
     void addNewDocumentFromMercuryToBaseByUSer(User user);
     void processDocument(Document document);
-    void processAllDocumentByEnterprise(Enterprise enterprise, NotificationProcessingMessage message);
-    void processAllDocumentByUser(User user);
+    void processAllDocumentByEnterprise(Enterprise enterprise, NotificationProcessingMessage message, String notificationId);
+
+    void processAllDocumentByUser(User user, String notificationId);
 
     boolean isVerifed(Enterprise enterprise, String uuid);
     String getName(Enterprise enterprise,String uuid);

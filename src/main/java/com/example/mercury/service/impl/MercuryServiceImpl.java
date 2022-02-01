@@ -218,24 +218,24 @@ public class MercuryServiceImpl implements MercuryService {
     }
 
     @Override
-    public void processAllDocumentByEnterprise(Enterprise enterprise, NotificationProcessingMessage message) {
+    public void processAllDocumentByEnterprise(Enterprise enterprise, NotificationProcessingMessage message, String notificationId) {
         List<Document> documentList = documentService.getNotProcessedByEnterprise(enterprise);
         notificationService.setTotalDocuments(message,documentList.size());
         notificationService.setProcessDocumentToZero(message);
-        notificationService.send(message);
+        notificationService.send(message, notificationId);
         for (Document document: documentList) {
             processDocument(document);
             notificationService.increaseProcessedDocuments(message);
-            notificationService.send(message);
+            notificationService.send(message, notificationId);
         }
     }
 
     @Override
-    public void processAllDocumentByUser(User user) {
+    public void processAllDocumentByUser(User user, String notificationId) {
         List<Enterprise> enterpriseList = enterpriseService.getAllByUser(user);
         NotificationProcessingMessage message = notificationService.getMessage(enterpriseList.size(),0);
         for (Enterprise enterprise: enterpriseList) {
-            processAllDocumentByEnterprise(enterprise, message);
+            processAllDocumentByEnterprise(enterprise, message, notificationId);
             notificationService.increaseProcessedEnterprise(message);
         }
     }

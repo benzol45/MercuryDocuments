@@ -8,5 +8,5 @@ public interface NotificationService {
     void setProcessDocumentToZero(NotificationProcessingMessage message);
     void increaseProcessedEnterprise(NotificationProcessingMessage message);
     void increaseProcessedDocuments(NotificationProcessingMessage message);
-    void send(NotificationProcessingMessage message);
+    void send(NotificationProcessingMessage message, String notificationId);
 }
