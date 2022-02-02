@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.UUID;
 
 @Controller
 public class MainController {
@@ -26,12 +30,16 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String getIndexPage(Model model, Authentication authentication, HttpSession session) {
+    public String getIndexPage(Model model, Authentication authentication, HttpServletResponse response) {
         User user = getCurrentUser(authentication);
 
         model.addAttribute("fullName",user.getFullName());
         model.addAttribute("enterpriseDocumentList",enterpriseService.getListNumerDocumentOfEnterpriseByUser(user));
-        model.addAttribute("session", session.getId());
+
+        Cookie cookie = new Cookie("notificationID", UUID.randomUUID().toString());
+        cookie.setMaxAge(-1);
+        response.addCookie(cookie);
+
         return "Main";
     }
 
@@ -43,8 +51,8 @@ public class MainController {
     }
 
     @GetMapping("/processAllDocumets")
-    public String processUserDocs(Authentication authentication, HttpSession session) {
-        mercuryService.processAllDocumentByUser(getCurrentUser(authentication), session.getId());
+    public String processUserDocs(Authentication authentication, @CookieValue(name = "notificationID") String notificationID) {
+        mercuryService.processAllDocumentByUser(getCurrentUser(authentication), notificationID);
 
         return ("redirect:/");
     }

@@ -10,7 +10,6 @@
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <script src="/app.js"></script>
-    <!--<script>$(document).ready ( connect());-->
     </script>
 </head>
 <body>
@@ -55,6 +54,5 @@
             </tr>
         </#list>
     </table>
-    <div id="test" hidden>${session}</div>
 </body>
 </html>
