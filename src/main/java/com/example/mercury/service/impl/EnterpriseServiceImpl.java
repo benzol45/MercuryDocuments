@@ -39,6 +39,11 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     }
 
     @Override
+    public List<Enterprise> getAll() {
+        return enterpriseRepository.getAll();
+    }
+
+    @Override
     public List<Enterprise> getAllByUser(User user) {
         return enterpriseRepository.getAllByUser(user);
     }

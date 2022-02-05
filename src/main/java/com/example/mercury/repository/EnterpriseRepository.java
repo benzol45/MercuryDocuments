@@ -12,6 +12,7 @@ public interface EnterpriseRepository {
     void update(Enterprise enterprise);
 
     Enterprise getByUUID(UUID uuid);
+    List<Enterprise> getAll();
     List<Enterprise> getAllByUser(User user);
 
     List<EnterpriseDocumentNumer> getListNumerDocumentOfEnterpriseByUser(User user);

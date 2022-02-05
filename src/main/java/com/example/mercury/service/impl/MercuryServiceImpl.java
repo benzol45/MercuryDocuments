@@ -10,8 +10,11 @@ import com.example.mercury.service.DocumentService;
 import com.example.mercury.service.EnterpriseService;
 import com.example.mercury.service.MercuryService;
 import com.example.mercury.service.NotificationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.vetrf.api.schema.cdm.application.Application;
 import ru.vetrf.api.schema.cdm.application.ApplicationResultWrapper;
@@ -55,8 +58,7 @@ public class MercuryServiceImpl implements MercuryService {
         this.notificationService = notificationService;
     }
 
-    @Override
-    public List<Document> getDocumentFromMercuryByEntreprise(Enterprise enterprise) {
+    private List<Document> getDocumentFromMercuryByEntreprise(Enterprise enterprise) {
         //В классе GetVetDocumentListRequest добавил @XmlRootElement(name = "getVetDocumentListRequest") для сериализации
         GetVetDocumentListRequest getVetDocumentListRequest = new ru.vetrf.api.schema.cdm.mercury.g2b.applications.v2.ObjectFactory().createGetVetDocumentListRequest();
         getVetDocumentListRequest.setLocalTransactionId(UUID.randomUUID().toString());
@@ -94,7 +96,30 @@ public class MercuryServiceImpl implements MercuryService {
     }
 
     @Override
-    public void addNewDocumentFromMercuryToBaseByUSer(User user) {
+    @Scheduled(fixedDelayString = "${mercury.sheduler-get-new-documents-delay-ms}")
+    public void getAndSaveAllDocumentFromMercuryToBase() {
+        Logger logger = LoggerFactory.getLogger(MercuryServiceImpl.class);
+        logger.trace("Start get documents from Mercury");
+        List<Enterprise> enterpriseList = enterpriseService.getAll();
+        for (Enterprise enterprise: enterpriseList) {
+            logger.trace("Enterprise: " + enterprise.getMercuryName());
+            List<Document> documentListByEnterprise = getDocumentFromMercuryByEntreprise(enterprise);
+            logger.trace("Recived: " + documentListByEnterprise.size() + " docs");
+
+            int addedCounter = 0;
+            for (Document document:documentListByEnterprise) {
+                if (documentService.getByUUID(document.getUuid())==null) {
+                    documentService.add(document);
+                    addedCounter++;
+                }
+            }
+            logger.trace("Added new: " + addedCounter + " docs");
+        }
+        logger.trace("End get documents from Mercury");
+    }
+
+    @Override
+    public void getAndSaveDocumentFromMercuryToBaseByUSer(User user) {
         List<Document> documentList = new ArrayList<>();
 
         List<Enterprise> enterpriseList = enterpriseService.getAllByUser(user);
@@ -110,8 +135,8 @@ public class MercuryServiceImpl implements MercuryService {
         }
     }
 
-    @Override
-    public void processDocument(Document document) {
+
+    private void processDocument(Document document) {
         if (Boolean.parseBoolean(environment.getProperty("mercury.fake-documents-processing"))){
             try {
                 Thread.sleep(5000);
@@ -241,7 +266,7 @@ public class MercuryServiceImpl implements MercuryService {
     }
 
     @Override
-    public boolean isVerifed(Enterprise enterprise, String uuid) {
+    public boolean isEnterpriseVerifed(Enterprise enterprise, String uuid) {
         try {
             return !getEnterpriseNameFromMercuryByUUID(enterprise, uuid).equals("");
         } catch (EntityNotFoundFault | IncorrectRequestFault | InternalServiceFault e) {
@@ -250,7 +275,7 @@ public class MercuryServiceImpl implements MercuryService {
     }
 
     @Override
-    public String getName(Enterprise enterprise, String uuid) {
+    public String getEnterpriseName(Enterprise enterprise, String uuid) {
         try {
             return getEnterpriseNameFromMercuryByUUID(enterprise, uuid);
         } catch (EntityNotFoundFault | IncorrectRequestFault | InternalServiceFault e) {

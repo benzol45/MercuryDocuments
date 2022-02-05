@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <appender name="TO_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>shedulerWork.log</file>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</Pattern>
+        </layout>
+    </appender>
+
+    <logger name="com.example.mercury.service.impl.MercuryServiceImpl" level="TRACE" additivity="false">
+        <appender-ref ref="TO_FILE" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+</configuration>

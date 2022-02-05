@@ -1,6 +1,5 @@
 package com.example.mercury.controller;
 
-import com.example.mercury.entitiy.Document;
 import com.example.mercury.entitiy.Enterprise;
 import com.example.mercury.service.DocumentService;
 import com.example.mercury.service.EnterpriseService;
@@ -10,8 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("enterprise/")
@@ -39,8 +36,8 @@ public class EnterpriseController {
 
         model.addAttribute("uuid",uuid);
         model.addAttribute("enterprise",enterprise);
-        model.addAttribute("isVerifed",mercuryService.isVerifed(enterprise,uuid));
-        model.addAttribute("mercuryName",mercuryService.getName(enterprise,uuid));
+        model.addAttribute("isVerifed",mercuryService.isEnterpriseVerifed(enterprise,uuid));
+        model.addAttribute("mercuryName",mercuryService.getEnterpriseName(enterprise,uuid));
 
         return "AddEnterpriseValidateAndCommit";
     }

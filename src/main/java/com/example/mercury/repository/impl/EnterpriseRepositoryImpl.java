@@ -40,6 +40,11 @@ public class EnterpriseRepositoryImpl implements EnterpriseRepository {
     }
 
     @Override
+    public List<Enterprise> getAll() {
+        return entityManager.createQuery("select enterprise from Enterprise as enterprise").getResultList();
+    }
+
+    @Override
     public List<Enterprise> getAllByUser(User user) {
         return entityManager.createQuery("Select enterprise From Enterprise as enterprise where enterprise.user=:User").setParameter("User",user).getResultList();
 

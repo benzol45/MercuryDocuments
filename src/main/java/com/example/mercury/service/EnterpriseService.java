@@ -9,6 +9,7 @@ import java.util.List;
 public interface EnterpriseService {
     void addEnterprise(Enterprise enterprise, String uuid, String username);
 
+    List<Enterprise> getAll();
     List<Enterprise> getAllByUser(User user);
     Enterprise getByUUID(String uuid);
 

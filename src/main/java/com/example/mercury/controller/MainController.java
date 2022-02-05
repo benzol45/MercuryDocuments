@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
 @Controller
@@ -45,7 +44,7 @@ public class MainController {
 
     @GetMapping("/getAllDocumets")
     public String getAllDocumentFromMercury(Authentication authentication) {
-        mercuryService.addNewDocumentFromMercuryToBaseByUSer(getCurrentUser(authentication));
+        mercuryService.getAndSaveDocumentFromMercuryToBaseByUSer(getCurrentUser(authentication));
 
         return ("redirect:/");
     }
