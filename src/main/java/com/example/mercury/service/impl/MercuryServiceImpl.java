@@ -99,12 +99,12 @@ public class MercuryServiceImpl implements MercuryService {
     @Scheduled(fixedDelayString = "${mercury.sheduler-get-new-documents-delay-ms}")
     public void getAndSaveAllDocumentFromMercuryToBase() {
         Logger logger = LoggerFactory.getLogger(MercuryServiceImpl.class);
-        logger.trace("Start get documents from Mercury");
+        logger.trace("[gd] Start get documents from Mercury");
         List<Enterprise> enterpriseList = enterpriseService.getAll();
         for (Enterprise enterprise: enterpriseList) {
-            logger.trace("Enterprise: " + enterprise.getMercuryName());
+            logger.trace("[gd] Enterprise: " + enterprise.getMercuryName());
             List<Document> documentListByEnterprise = getDocumentFromMercuryByEntreprise(enterprise);
-            logger.trace("Recived: " + documentListByEnterprise.size() + " docs");
+            logger.trace("[gd] Recived: " + documentListByEnterprise.size() + " docs");
 
             int addedCounter = 0;
             for (Document document:documentListByEnterprise) {
@@ -113,9 +113,9 @@ public class MercuryServiceImpl implements MercuryService {
                     addedCounter++;
                 }
             }
-            logger.trace("Added new: " + addedCounter + " docs");
+            logger.trace("[gd] Added new: " + addedCounter + " docs");
         }
-        logger.trace("End get documents from Mercury");
+        logger.trace("[gd] End get documents from Mercury");
     }
 
     @Override
@@ -263,6 +263,23 @@ public class MercuryServiceImpl implements MercuryService {
             processAllDocumentByEnterprise(enterprise, message, notificationId);
             notificationService.increaseProcessedEnterprise(message);
         }
+    }
+
+    @Override
+    @Scheduled(fixedDelayString = "${mercury.sheduler-processing-documents-delay-ms}")
+    public void processAllDocumentByAutoprocessedEnterprise() {
+        Logger logger = LoggerFactory.getLogger(MercuryServiceImpl.class);
+        logger.trace("[pr] Start processing documents in Mercury");
+        List<Enterprise> enterpriseList = enterpriseService.getAllAutoprocessed();
+        for (Enterprise enterprise: enterpriseList) {
+            logger.trace("[pr] Enterprise: " + enterprise.getMercuryName());
+            List<Document> documentList = documentService.getNotProcessedByEnterprise(enterprise);
+            logger.trace("[pr] For procedding: " + documentList.size() + " docs");
+            for (Document document: documentList) {
+                processDocument(document);
+            }
+        }
+        logger.trace("[pr] End processing documents in Mercury");
     }
 
     @Override

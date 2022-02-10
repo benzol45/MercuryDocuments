@@ -11,6 +11,7 @@ public interface EnterpriseService {
 
     List<Enterprise> getAll();
     List<Enterprise> getAllByUser(User user);
+    List<Enterprise> getAllAutoprocessed();
     Enterprise getByUUID(String uuid);
 
     List<EnterpriseDocumentNumer> getListNumerDocumentOfEnterpriseByUser(User user);

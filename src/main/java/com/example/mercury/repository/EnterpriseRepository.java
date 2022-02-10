@@ -14,7 +14,10 @@ public interface EnterpriseRepository {
     Enterprise getByUUID(UUID uuid);
     List<Enterprise> getAll();
     List<Enterprise> getAllByUser(User user);
+    List<Enterprise> getAllAutoprocessed();
 
     List<EnterpriseDocumentNumer> getListNumerDocumentOfEnterpriseByUser(User user);
     int getCount();
+
+
 }

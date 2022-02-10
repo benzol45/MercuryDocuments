@@ -51,6 +51,11 @@ public class EnterpriseRepositoryImpl implements EnterpriseRepository {
     }
 
     @Override
+    public List<Enterprise> getAllAutoprocessed() {
+        return entityManager.createQuery("select enterprise from Enterprise as enterprise where enterprise.autoProcessing=true").getResultList();
+    }
+
+    @Override
     public List<EnterpriseDocumentNumer> getListNumerDocumentOfEnterpriseByUser(User user) {
 
     /*    ResultTransformer resultTransformer = new ResultTransformer() {

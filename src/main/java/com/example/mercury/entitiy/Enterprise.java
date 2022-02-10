@@ -34,6 +34,9 @@ public class Enterprise {
     @JoinColumn(name="user_id")
     private User user;
 
+    @Column
+    private Boolean autoProcessing;
+
     public Enterprise() {}
 
 
@@ -115,5 +118,13 @@ public class Enterprise {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Boolean getAutoProcessing() {
+        return autoProcessing;
+    }
+
+    public void setAutoProcessing(Boolean autoProcessing) {
+        this.autoProcessing = autoProcessing;
     }
 }

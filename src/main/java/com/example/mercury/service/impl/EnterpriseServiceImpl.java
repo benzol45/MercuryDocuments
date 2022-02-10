@@ -31,6 +31,9 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         if (enterprise.getVetInspection()==null) {
             enterprise.setVetInspection(false);
         }
+        if (enterprise.getAutoProcessing()==null) {
+            enterprise.setAutoProcessing(false);
+        }
         if (enterpriseRepository.getByUUID(UUID.fromString(uuid)) == null) {
             enterpriseRepository.add(enterprise);
         } else {
@@ -46,6 +49,11 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     @Override
     public List<Enterprise> getAllByUser(User user) {
         return enterpriseRepository.getAllByUser(user);
+    }
+
+    @Override
+    public List<Enterprise> getAllAutoprocessed() {
+        return enterpriseRepository.getAllAutoprocessed();
     }
 
     @Override

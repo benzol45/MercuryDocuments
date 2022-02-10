@@ -13,6 +13,7 @@ public interface MercuryService {
 
     void processAllDocumentByEnterprise(Enterprise enterprise, NotificationProcessingMessage message, String notificationId);
     void processAllDocumentByUser(User user, String notificationId);
+    void processAllDocumentByAutoprocessedEnterprise();
 
     boolean isEnterpriseVerifed(Enterprise enterprise, String uuid);
     String getEnterpriseName(Enterprise enterprise, String uuid);

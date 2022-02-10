@@ -29,6 +29,10 @@
             <label for="vetInspection">Контроль входящих партий осуществляется ветврачом</label>
             <input type="checkbox" id="vetInspection" name="vetInspection">
         </p>
+        <p>
+            <label for="autoProcessing">Автоматически гасить поступающие ВСД</label>
+            <input type="checkbox" id="autoProcessing" name="autoProcessing">
+        </p>
 
         <input type="hidden" name="mercLogin" value="${enterprise.mercLogin}"/>
         <input type="hidden" name="vetisApiLogin" value="${enterprise.vetisApiLogin}"/>
